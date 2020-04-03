@@ -1,6 +1,6 @@
 scim2-parse-filter
 ============
-[![npm version](http://img.shields.io/npm/v/scim2-parse-filter.svg?style=flat&color=blue)](https://npmjs.org/package/scim-patch "View this project on npm")
+[![npm version](http://img.shields.io/npm/v/scim2-parse-filter.svg?style=flat&color=blue)](https://npmjs.org/package/scim2-parse-filter "View this project on npm")
 [![Build Status](https://travis-ci.com/thomaspoignant/scim2-parse-filter.svg?branch=master)](https://travis-ci.com/thomaspoignant/scim2-parse-filter)
 
 RFC7643 SCIM(System for Cross-domain Identity Management) 2.0 filter parser.
