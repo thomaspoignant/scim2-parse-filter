@@ -1,6 +1,6 @@
 {
   "name": "scim2-parse-filter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "This is a fork https://www.npmjs.com/package/scim2-filter version 0.2.0 with bug correction.",
   "main": "lib/src/index.js",
   "directories": {
@@ -20,12 +20,12 @@
     "test": "npm run build && mocha 'lib/test/**/*.test.js'"
   },
   "author": "thomas.poignant@gmail.com",
-  "license": "The Unlicense",
+  "license": "Unlicense",
   "devDependencies": {
     "@types/chai": "^4.2.1",
     "@types/mocha": "^5.2.7",
     "chai": "^4.2.0",
-    "mocha": "^6.2.0",
+    "mocha": "^6.2.3",
     "ts-node": "^8.3.0",
     "typescript": "^3.6.2"
   },
