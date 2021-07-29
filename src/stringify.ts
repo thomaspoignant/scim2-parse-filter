@@ -12,7 +12,7 @@ export function stringify(f: Filter, trimParens = true): string {
     case "lt":
     case "ge":
     case "le":
-      returnValue = `${f.attrPath} ${f.op} "${f.compValue}"`;
+      returnValue = `${f.attrPath} ${f.op} ${JSON.stringify(f.compValue)}`;
       break;
     case "pr":
       returnValue = `${f.attrPath} ${f.op}`;

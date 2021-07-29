@@ -152,5 +152,21 @@ describe('stringify', () =>{
         v("emails", and(v("value", eq("hoge", "@example.com")), v("value", eq("hoge", "@example.com")))),
         eq("name", "xxx"))
     );
+    test(
+      'userType eq "5"',
+      eq('userType', "5")
+    );
+    test(
+      'userType eq 5',
+      eq('userType', 5)
+    );
+    test(
+      'userType eq true',
+      eq('userType', true)
+    );
+    test(
+      'userType eq null',
+      eq('userType', null)
+    );
   });
 });
