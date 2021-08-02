@@ -19,7 +19,7 @@ export function stringify(f: Filter, trimParens = true): string {
       break;
     case "or":
     case "and":
-      returnValue = `(${stringify(f.filters[0], false)} ${f.op} ${stringify(f.filters[1], false)})`;
+      returnValue = `(${f.filters.map(filter => stringify(filter, false)).join(` ${f.op} `)})`;
       break;
     case "not":
       returnValue = `${f.op} (${stringify(f.filter, true)})`;

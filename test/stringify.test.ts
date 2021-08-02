@@ -1,5 +1,5 @@
 import { eq, op, pr, and, or, v } from "./test_util";
-import { Filter, parse, stringify } from "../src";
+import { Filter, flatten, parse, stringify } from "../src";
 import { assert } from "chai";
 
 // When modifying or adding to these tests,
@@ -167,6 +167,14 @@ describe('stringify', () =>{
     test(
       'userType eq null',
       eq('userType', null)
+    );
+    test(
+      'userType eq "worker" or userType eq "employee" or userType eq "admin"',
+      flatten(or(
+        eq('userType', 'worker'),
+        eq('userType', 'employee'),
+        eq('userType', 'admin')
+      ))
     );
   });
 });
