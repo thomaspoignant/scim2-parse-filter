@@ -1,6 +1,7 @@
 import * as toknizer from "./parser";
 import * as tester from "./tester";
 import * as fl from "./flatten";
+export { stringify } from "./stringify";
 
 /** Filter is filter ast object. There is extends [Operation] */
 export type Filter = AttrExp | LogExp | ValuePath | NotFilter;
