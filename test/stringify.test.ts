@@ -1,30 +1,19 @@
 import { eq, op, pr, and, or, v } from "./test_util";
-import { Filter, parse } from "../src";
+import { Filter, flatten, parse, stringify } from "../src";
 import { assert } from "chai";
 
 // When modifying or adding to these tests,
-// please make sure to do the inverse test in stringify!
+// please make sure to do the inverse test in parse!
 
 const test = (text: string, e: Filter) => {
   it(text, () => {
-    assert.deepEqual(parse(text), e);
+    assert.deepEqual(stringify(e), text);
   });
 };
-describe('parse', () =>{
+describe('stringify', () =>{
   describe("logic", () => {
-    function to_s(f: Filter): any {
-      switch (f.op) {
-        case "eq":
-          return `${f.attrPath}-${f.op}-${f.compValue}`;
-        case "or":
-        case "and":
-          return `${f.op}(${f.filters.map(to_s).join(" ")})`;
-        default:
-          return f;
-      }
-    }
     function teq(e: string, a: Filter) {
-      assert.deepEqual(to_s(a), to_s(parse(e)), e);
+      assert.deepEqual(stringify(a), stringify(parse(e)), e);
     }
     const [a1, e1]: [Filter, string] = [eq("n1", 1), "n1 eq 1"];
     const [a2, e2]: [Filter, string] = [eq("n2", 2), "n2 eq 2"];
@@ -80,9 +69,6 @@ describe('parse', () =>{
         or(and(a2, a3), and(a4, a1), and(a2, a3), and(a4, a1))
       );
     });
-  });
-  describe('operator ignore case', () => {
-    test(`hoge Eq "hoge"`, eq("hoge", "hoge"));
   });
 
   describe("samples", () => {
@@ -146,7 +132,7 @@ describe('parse', () =>{
       })
     );
     test(
-      `userType eq "Employee" and (emails.type eq "work")`,
+      `userType eq "Employee" and emails.type eq "work"`,
       and(eq("userType", "Employee"), eq("emails.type", "work"))
     );
     test(
@@ -165,6 +151,30 @@ describe('parse', () =>{
       or(
         v("emails", and(v("value", eq("hoge", "@example.com")), v("value", eq("hoge", "@example.com")))),
         eq("name", "xxx"))
+    );
+    test(
+      'userType eq "5"',
+      eq('userType', "5")
+    );
+    test(
+      'userType eq 5',
+      eq('userType', 5)
+    );
+    test(
+      'userType eq true',
+      eq('userType', true)
+    );
+    test(
+      'userType eq null',
+      eq('userType', null)
+    );
+    test(
+      'userType eq "worker" or userType eq "employee" or userType eq "admin"',
+      flatten(or(
+        eq('userType', 'worker'),
+        eq('userType', 'employee'),
+        eq('userType', 'admin')
+      ))
     );
   });
 });
