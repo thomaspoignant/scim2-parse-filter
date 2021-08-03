@@ -12,7 +12,7 @@ This is a fork https://www.npmjs.com/package/scim2-filter version 0.2.0 with bug
 
 usage
 -----
-###parse
+### parse
 You can parse filter query and get ast.
 ```javascript
 import {parse} from 'scim2-parse-filter';
@@ -49,7 +49,7 @@ assert.deepEqual(f, {
 });
 ```
 
-###filter
+### filter
 and You can use filter in json.
 
 ```javascript
@@ -64,7 +64,7 @@ const ret = users.filter(f);
 assert.deepEqual(ret, [users[0]]);
 ```
 
-###stringify
+### stringify
 and you can convert an AST back into a SCIM query.
 
 ```typescript
