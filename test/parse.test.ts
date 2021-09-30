@@ -144,14 +144,17 @@ describe('parse', () =>{
     );
     test(
       `not (emails co "example.com" or emails co "example.org") and userType ne "Employee"`,
-      and(op("ne", "userType", "Employee"), {
-        op: "not",
-        filter: or(
-          op("co", "emails", "example.com"),
-          op("co", "emails", "example.org")
-        )
-      })
-    )
+      and(
+        {
+          op: "not",
+          filter: or(
+            op("co", "emails", "example.com"),
+            op("co", "emails", "example.org")
+          )
+        },
+        op("ne", "userType", "Employee")
+      )
+    );
     test(
       `userType eq "Employee" and (emails.type eq "work")`,
       and(eq("userType", "Employee"), eq("emails.type", "work"))
