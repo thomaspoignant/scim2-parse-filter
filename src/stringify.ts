@@ -2,7 +2,7 @@ import { Filter } from ".";
 
 export function stringify(f: Filter, trimParens = true): string {
   let returnValue = '';
-  switch(f.op) {
+  switch (f.op) {
     case "eq":
     case "ne":
     case "co":
@@ -18,9 +18,11 @@ export function stringify(f: Filter, trimParens = true): string {
       returnValue = `${f.attrPath} ${f.op}`;
       break;
     case "or":
-    case "and":
       const filtersAsString = f.filters.map(filter => stringify(filter, false)).join(` ${f.op} `);
       returnValue = `(${filtersAsString})`;
+      break;
+    case "and":
+      returnValue = f.filters.map(filter => stringify(filter, false)).join(` ${f.op} `);
       break;
     case "not":
       returnValue = `${f.op} (${stringify(f.filter, true)})`;
@@ -30,7 +32,7 @@ export function stringify(f: Filter, trimParens = true): string {
       break;
   }
   if (trimParens) {
-    returnValue = returnValue.replace(/^\(/, '').replace(/\)$/, '');
+    returnValue = returnValue.replace(/(^\()(.*)(\)$)/, '$2');
   }
   return returnValue;
 }

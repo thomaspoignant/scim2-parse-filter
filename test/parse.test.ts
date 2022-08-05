@@ -10,7 +10,7 @@ const test = (text: string, e: Filter) => {
     assert.deepEqual(parse(text), e);
   });
 };
-describe('parse', () =>{
+describe('parse', () => {
   describe("logic", () => {
     function to_s(f: Filter): any {
       switch (f.op) {
@@ -145,6 +145,49 @@ describe('parse', () =>{
         )
       })
     );
+    test(
+      `not (emails co "example.com" or emails co "example.org") and userType ne "Employee"`,
+      and(
+        {
+          op: "not",
+          filter: or(
+            op("co", "emails", "example.com"),
+            op("co", "emails", "example.org")
+          )
+        },
+        op("ne", "userType", "Employee")
+      )
+    );
+  test(
+    `userType eq "Employee" and not (emails co "example.com" or emails co "example.org") and userType ne "Employee"`,
+    and(
+      op("eq", "userType", "Employee"),
+      {
+        op: "not",
+        filter: or(
+          op("co", "emails", "example.com"),
+          op("co", "emails", "example.org")
+        )
+      },
+      op("ne", "userType", "Employee")
+    )
+  );
+  test(
+    `userType eq "Employee" or not (emails co "example.com" or emails co "example.org") and userType ne "Employee"`,
+    or(
+      op("eq", "userType", "Employee"),
+      and(
+        {
+          op: "not",
+          filter: or(
+            op("co", "emails", "example.com"),
+            op("co", "emails", "example.org")
+          )
+        },
+        op("ne", "userType", "Employee")
+      )
+    )
+  );
     test(
       `userType eq "Employee" and (emails.type eq "work")`,
       and(eq("userType", "Employee"), eq("emails.type", "work"))
