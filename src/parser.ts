@@ -84,9 +84,7 @@ export function parseExpression(list: TokenList): Filter {
     return filter;
   } else if (t.literal.toLowerCase() == "not") {
     const notFilter: NotFilter = { op: "not", filter: parseExpression(list) };
-    const op = list.peek().literal.toLowerCase();
-    const p = PRECEDENCE[op];
-    return parseInxif(notFilter, list, p);
+    return parseInxif(notFilter, list, Precedence.NOT);
   } else if (t.type == "Word") {
     return readValFilter(t, list);
   } else {
@@ -96,11 +94,13 @@ export function parseExpression(list: TokenList): Filter {
 enum Precedence {
   LOWEST = 1,
   OR = 2,
-  AND = 3
+  AND = 3,
+  NOT = 4
 }
 const PRECEDENCE: { [key: string]: Precedence } = {
   'or': Precedence.OR,
-  'and': Precedence.AND
+  'and': Precedence.AND,
+  'not': Precedence.NOT
 }
 function parseInxif(left: Filter, list: TokenList, precede: Precedence): Filter {
   const op = list.peek().literal.toLowerCase();
