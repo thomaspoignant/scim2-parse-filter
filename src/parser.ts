@@ -1,6 +1,6 @@
 import { Filter, Compare, NotFilter, Suffix, ValuePath } from ".";
 
-type TokenType = "Number" | "Quoted" | "Blacket" | "Word" | "EOT";
+type TokenType = "Number" | "Quoted" | "Bracket" | "Word" | "EOT";
 const EOT = { type: "EOT" as TokenType, literal: "" };
 
 export type Token = {
@@ -20,7 +20,7 @@ export function tokenizer(f: string): Token[] {
     } else if (n[3]) {
       ret.push({ literal: n[3], type: "Quoted" });
     } else if (n[4]) {
-      ret.push({ literal: n[4], type: "Blacket" });
+      ret.push({ literal: n[4], type: "Bracket" });
     } else if (n[5]) {
       ret.push({ literal: n[5], type: "Word" });
     }
@@ -83,38 +83,41 @@ export function parseExpression(list: TokenList): Filter {
     }
     return filter;
   } else if (t.literal.toLowerCase() == "not") {
-    return { op: "not", filter: parseFilter(list) } as NotFilter;
+    const notFilter: NotFilter = { op: "not", filter: parseExpression(list) };
+    return parseInxif(notFilter, list, Precedence.NOT);
   } else if (t.type == "Word") {
     return readValFilter(t, list);
   } else {
     throw new Error(`Unexpected token ${t.literal} (${t.type})`);
   }
 }
-enum Precedence{
+enum Precedence {
   LOWEST = 1,
   OR = 2,
-  AND = 3
+  AND = 3,
+  NOT = 4
 }
-const PRECEDENCE : { [key:string]: Precedence }= {
-  'or':Precedence.OR,
-  'and':Precedence.AND
+const PRECEDENCE: { [key: string]: Precedence } = {
+  'or': Precedence.OR,
+  'and': Precedence.AND,
+  'not': Precedence.NOT
 }
 function parseInxif(left: Filter, list: TokenList, precede: Precedence): Filter {
   const op = list.peek().literal.toLowerCase();
   const p = PRECEDENCE[op];
-  if(!p || precede >= p){
+  if (!p || precede >= p) {
     return left;
   }
   const filters = [left];
   while (list.peek().literal.toLowerCase() === op) {
     let r = parseExpression(list.forward());
     const rr = list.peek().literal.toLowerCase();
-    if(PRECEDENCE[rr] > p){
+    if (PRECEDENCE[rr] > p) {
       r = parseInxif(r, list, p);
     }
     filters.push(r);
   }
-  return parseInxif({ op , filters } as Filter, list, precede);
+  return parseInxif({ op, filters } as Filter, list, precede);
 }
 function readValFilter(left: Token, list: TokenList): Filter {
   if (left.type !== "Word") {
