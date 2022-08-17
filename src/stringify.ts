@@ -18,14 +18,14 @@ export function stringify(f: Filter, trimParens = true): string {
       returnValue = `${f.attrPath} ${f.op}`;
       break;
     case "or":
-      const filtersAsString = f.filters.map(filter => stringify(filter, false)).join(` ${f.op} `);
+      const filtersAsString = f.filters.map(filter => stringify(filter)).join(` ${f.op} `);
       returnValue = `(${filtersAsString})`;
       break;
     case "and":
       returnValue = f.filters.map(filter => stringify(filter, false)).join(` ${f.op} `);
-      break;
+      return returnValue;
     case "not":
-      returnValue = `${f.op} (${stringify(f.filter, true)})`;
+      returnValue = `${f.op} (${stringify(f.filter)})`;
       break;
     case "[]":
       returnValue = `${f.attrPath}[${stringify(f.valFilter)}]`;
