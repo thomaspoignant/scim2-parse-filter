@@ -1,6 +1,6 @@
 import { Filter } from ".";
 
-export function stringify(f: Filter, trimParens = true): string {
+export function stringify(f: Filter, wrapOr = false): string {
   let returnValue = '';
   switch (f.op) {
     case "eq":
@@ -19,11 +19,11 @@ export function stringify(f: Filter, trimParens = true): string {
       break;
     case "or":
       const filtersAsString = f.filters.map(filter => stringify(filter)).join(` ${f.op} `);
-      returnValue = `(${filtersAsString})`;
+      returnValue = wrapOr ? `(${filtersAsString})` : filtersAsString;
       break;
     case "and":
-      returnValue = f.filters.map(filter => stringify(filter, false)).join(` ${f.op} `);
-      return returnValue;
+      returnValue = f.filters.map(filter => stringify(filter, true)).join(` ${f.op} `);
+      break;
     case "not":
       returnValue = `${f.op} (${stringify(f.filter)})`;
       break;
@@ -31,8 +31,6 @@ export function stringify(f: Filter, trimParens = true): string {
       returnValue = `${f.attrPath}[${stringify(f.valFilter)}]`;
       break;
   }
-  if (trimParens) {
-    returnValue = returnValue.replace(/(^\()(.*)(\)$)/, '$2');
-  }
+
   return returnValue;
 }
