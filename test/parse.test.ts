@@ -158,25 +158,10 @@ describe('parse', () => {
         op("ne", "userType", "Employee")
       )
     );
-  test(
-    `userType eq "Employee" and not (emails co "example.com" or emails co "example.org") and userType ne "Employee"`,
-    and(
-      op("eq", "userType", "Employee"),
-      {
-        op: "not",
-        filter: or(
-          op("co", "emails", "example.com"),
-          op("co", "emails", "example.org")
-        )
-      },
-      op("ne", "userType", "Employee")
-    )
-  );
-  test(
-    `userType eq "Employee" or not (emails co "example.com" or emails co "example.org") and userType ne "Employee"`,
-    or(
-      op("eq", "userType", "Employee"),
+    test(
+      `userType eq "Employee" and not (emails co "example.com" or emails co "example.org") and userType ne "Employee"`,
       and(
+        op("eq", "userType", "Employee"),
         {
           op: "not",
           filter: or(
@@ -186,8 +171,56 @@ describe('parse', () => {
         },
         op("ne", "userType", "Employee")
       )
-    )
-  );
+    );
+    test(
+      `userType eq "Employee" or not (emails co "example.com" or emails co "example.org") and userType ne "Employee"`,
+      or(
+        op("eq", "userType", "Employee"),
+        and(
+          {
+            op: "not",
+            filter: or(
+              op("co", "emails", "example.com"),
+              op("co", "emails", "example.org")
+            )
+          },
+          op("ne", "userType", "Employee")
+        )
+      )
+    );
+    test(
+      `(userType eq "Employee" or userType eq "Employer") and emails sw "foo" and not (emails co "example.com" or emails co "example.org")`,
+      and(
+        or(
+          op("eq", "userType", "Employee"),
+          op("eq", "userType", "Employer"),
+        ),
+        op("sw", "emails", "foo"),
+        {
+          op: "not",
+          filter: or(
+            op("co", "emails", "example.com"),
+            op("co", "emails", "example.org")
+          )
+        },
+      )
+    );
+    test(
+      `userType eq "Employee" and (emails sw "foo" or not (emails co "example.com" or emails co "example.org"))`,
+      and(
+        op("eq", "userType", "Employee"),
+        or(
+          op("sw", "emails", "foo"),
+          {
+            op: "not",
+            filter: or(
+              op("co", "emails", "example.com"),
+              op("co", "emails", "example.org")
+            )
+          },
+        ),
+      )
+    );
     test(
       `userType eq "Employee" and (emails.type eq "work")`,
       and(eq("userType", "Employee"), eq("emails.type", "work"))

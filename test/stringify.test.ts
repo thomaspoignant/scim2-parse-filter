@@ -219,5 +219,38 @@ describe('stringify', () => {
         )
       )
     );
+    test(
+      `(userType eq "Employee" or userType eq "Employer") and emails sw "foo" and not (emails co "example.com" or emails co "example.org")`,
+      and(
+        or(
+          op("eq", "userType", "Employee"),
+          op("eq", "userType", "Employer"),
+        ),
+        op("sw", "emails", "foo"),
+        {
+          op: "not",
+          filter: or(
+            op("co", "emails", "example.com"),
+            op("co", "emails", "example.org")
+          )
+        },
+      )
+    );
+    test(
+      `userType eq "Employee" and (emails sw "foo" or not (emails co "example.com" or emails co "example.org"))`,
+      and(
+        op("eq", "userType", "Employee"),
+        or(
+          op("sw", "emails", "foo"),
+          {
+            op: "not",
+            filter: or(
+              op("co", "emails", "example.com"),
+              op("co", "emails", "example.org")
+            )
+          },
+        ),
+      )
+    );
   });
 });
