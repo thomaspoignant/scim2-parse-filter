@@ -23,7 +23,7 @@
   "license": "Unlicense",
   "devDependencies": {
     "@types/chai": "^4.2.12",
-    "@types/mocha": "^9.0.0",
+    "@types/mocha": "^10.0.0",
     "chai": "^4.2.0",
     "mocha": "^10.0.0",
     "ts-node": "^10.1.0",
