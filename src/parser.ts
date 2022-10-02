@@ -10,7 +10,7 @@ export type Token = {
 export function tokenizer(f: string): Token[] {
   const ret: Token[] = [];
   let rest = f;
-  const patterns = /^(?:(\s+)|(-?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?)|("(?:[^"]|\\.|\n)*")|([[\]()])|(\w[-\w\._:\/%]*))/;
+  const patterns = /^(?:(\s+)|(-?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?)|("(?:[^"]|\\.|\n)*")|([[()]|]\.?)|(\w[-\w._:\/%]*))/;
   let n;
   while ((n = patterns.exec(rest))) {
     if (n[1] || n[0].length === 0) {
@@ -127,17 +127,26 @@ function readValFilter(left: Token, list: TokenList): Filter {
   const t = list.shift();
   const op = t.literal.toLowerCase();
   if (cops.has(op)) {
-    var compValue = parseCompValue(list);
+    const compValue = parseCompValue(list);
     return { op, attrPath, compValue } as Compare;
   } else if (sops.has(op)) {
     return { op, attrPath } as Suffix;
-  } else if (op == "[") {
+  } else if (op === "[") {
     const valFilter = parseFilter(list);
     const close = list.shift();
-    if (close.literal !== "]") {
+    if (close.literal[0] !== "]") {
       throw new Error(`Unexpected token ${close.literal} expected ']'`);
     }
-    return { op: "[]", attrPath, valFilter } as ValuePath;
+    const valPath: ValuePath = { op: "[]", attrPath, valFilter };
+
+    if (close.literal[1] !== "." || list.peek().type !== "Word") {
+      return valPath
+    }
+
+    // convert a sub-attribute after a value-path to an 'and' op
+    const next = list.shift()
+    next.literal = `${attrPath}.${next.literal}`
+    return { op: 'and', filters: [valPath, readValFilter(next, list)] }
   } else {
     throw new Error(
       `Unexpected token ${attrPath} ${t.literal} as valFilter operator`
