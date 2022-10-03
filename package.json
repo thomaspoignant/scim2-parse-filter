@@ -15,7 +15,7 @@
     "filter"
   ],
   "scripts": {
-    "watch": "mocha -r ts-node/register  'test/**/*.ts' 'src/**/*.ts' -w --watch-extensions ts",
+    "watch": "mocha -r ts-node/register 'test/**/*.ts' 'src/**/*.ts' -w --watch-extensions ts",
     "build": "tsc",
     "test": "npm run build && mocha 'lib/test/**/*.test.js'"
   },

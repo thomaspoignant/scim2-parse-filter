@@ -230,6 +230,30 @@ describe('parse', () => {
       and(eq("userType", "Employee"), v("emails", and(eq("type", "work"), op("co", "value", "@example.com"))))
     );
     test(
+        `emails[type eq "work"] and emails.value eq "user@example.com"`,
+      and(
+        v("emails", eq("type", "work")),
+        eq("emails.value", "user@example.com"),
+      )
+    );
+    test(
+      `emails[type eq "work"].value eq "user@example.com"`,
+      and(
+        v("emails", eq("type", "work")),
+        eq("emails.value", "user@example.com"),
+      )
+    );
+    test(
+      `emails[type eq "work"].value eq "user@example.com" and name eq "foo"`,
+      and(
+        and(
+          v("emails", eq("type", "work")),
+          eq("emails.value", "user@example.com"),
+        ),
+        eq("name", "foo"),
+      )
+    );
+    test(
       `emails[type eq "work" and value co "@example.com"] or ims[type eq "xmpp" and value co "@foo.com"]`,
       or(
         v("emails", and(eq("type", "work"), op("co", "value", "@example.com"))),

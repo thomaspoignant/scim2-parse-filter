@@ -6,15 +6,18 @@ const assert = chai.assert;
 
 describe("tokenizer", () => {
   const tok = (literal: string, type: string) => ({ literal, type } as Token);
+
   it("eot", () => {
     assert.deepEqual(tokenizer(""), [EOT]);
   });
+
   it("false", () => {
     assert.deepEqual(tokenizer("false"), [
       { literal: "false", type: "Word" },
       EOT
     ]);
   });
+
   it("userName is AttrPath", () => {
     assert.deepEqual(tokenizer("userName"), [
       { literal: "userName", type: "Word" },
@@ -28,4 +31,22 @@ describe("tokenizer", () => {
       tokenizer("userName eq -12")
     );
   });
+
+  it("sub-attribute after ValPath", () => {
+    assert.deepEqual(
+        tokenizer('emails[type eq "work"].value eq "user@example.com"'),
+        [
+          tok("emails", "Word"),
+          tok("[", "Bracket"),
+          tok("type", "Word"),
+          tok("eq", "Word"),
+          tok("\"work\"", "Quoted"),
+          tok("].", "Bracket"),
+          tok("value", "Word"),
+          tok("eq", "Word"),
+          tok("\"user@example.com\"", "Quoted"),
+          EOT,
+      ]
+    )
+  })
 });
