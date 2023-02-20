@@ -20,4 +20,12 @@ describe("filter", () => {
         const ret = users.filter(f);
         assert.deepEqual(ret, [users[0]]);
     });
+    it("end to end shielding backslash in quotes", () => {
+        const f = filter(parse(`userName eq "domain\\user.name"`));
+        const users = [
+            { userName: "domain\\user.name" }
+        ];
+        const ret = users.filter(f);
+        assert.deepEqual(ret, users);
+    });
 });
