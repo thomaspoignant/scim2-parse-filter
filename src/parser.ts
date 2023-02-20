@@ -18,7 +18,8 @@ export function tokenizer(f: string): Token[] {
     } else if (n[2]) {
       ret.push({ literal: n[2], type: "Number" });
     } else if (n[3]) {
-      ret.push({ literal: n[3], type: "Quoted" });
+      const literal = n[3].replace(/\\/g, '\\\\');
+      ret.push({ literal, type: "Quoted" });
     } else if (n[4]) {
       ret.push({ literal: n[4], type: "Bracket" });
     } else if (n[5]) {
