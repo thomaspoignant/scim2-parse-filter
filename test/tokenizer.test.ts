@@ -32,6 +32,14 @@ describe("tokenizer", () => {
     );
   });
 
+  it("0Field1 eq -12", () => {
+    console.log(tokenizer("0Field1 eq -12"))
+    assert.deepEqual(
+      [tok("0Field1", "Word"), tok("eq", "Word"), tok("-12", "Number"), EOT],
+      tokenizer("0Field1 eq -12")
+    );
+  });
+
   it("sub-attribute after ValPath", () => {
     assert.deepEqual(
         tokenizer('emails[type eq "work"].value eq "user@example.com"'),
