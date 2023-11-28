@@ -1,4 +1,4 @@
-import { Filter } from ".";
+import { Filter } from "./index";
 
 export const valfilter = (f: Filter, path?: string): Filter => {
   if (path && "attrPath" in f) {
