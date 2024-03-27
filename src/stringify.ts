@@ -1,4 +1,4 @@
-import { Filter } from ".";
+import { Filter } from "./index";
 
 export function stringify(f: Filter, wrapOr = false): string {
   let returnValue = '';
