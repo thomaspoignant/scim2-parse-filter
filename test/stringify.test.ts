@@ -253,4 +253,12 @@ describe('stringify', () => {
       )
     );
   });
+
+  it('consistent stringify and parse', () => {
+    const text = '064869bf-be25-466f-803d-004a0540574b eq "bjensen"'
+    const f = parse(text)
+    const string = stringify(f)
+
+    assert.deepEqual(text, string)
+  })
 });

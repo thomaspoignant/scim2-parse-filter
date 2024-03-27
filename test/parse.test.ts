@@ -1,5 +1,5 @@
 import { eq, op, pr, and, or, v } from "./test_util";
-import { Filter, parse } from "../src";
+import { Filter, parse, stringify } from "../src";
 import { assert } from "chai";
 
 // When modifying or adding to these tests,
@@ -267,4 +267,20 @@ describe('parse', () => {
         eq("name", "xxx"))
     );
   });
+
+  describe('attrPath start with number', () => {
+    test('064869bf-be25-466f-803d-004a0540574b eq "bjensen"', eq("064869bf-be25-466f-803d-004a0540574b", "bjensen"));
+
+    it('consistent parse and stringify', () => {
+      const f : Filter = {
+        op: 'eq',
+        attrPath: '064869bf-be25-466f-803d-004a0540574b',
+        compValue: 'bjensen'
+      }
+      const string = stringify(f)
+      const ff = parse(string)
+
+      assert.deepEqual(f, ff)
+    })
+  })
 });
