@@ -1,6 +1,6 @@
 {
   "name": "scim2-parse-filter",
-  "version": "0.2.10",
+  "version": "0.2.9",
   "description": "This is a fork https://www.npmjs.com/package/scim2-filter version 0.2.0 with bug correction.",
   "main": "lib/src/index.js",
   "directories": {
