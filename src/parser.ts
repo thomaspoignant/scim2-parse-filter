@@ -1,4 +1,4 @@
-import { Filter, Compare, NotFilter, Suffix, ValuePath } from ".";
+import { Filter, Compare, NotFilter, Suffix, ValuePath } from "./index";
 
 type TokenType = "Number" | "Quoted" | "Bracket" | "Word" | "EOT";
 const EOT = { type: "EOT" as TokenType, literal: "" };
@@ -10,7 +10,7 @@ export type Token = {
 export function tokenizer(f: string): Token[] {
   const ret: Token[] = [];
   let rest = f;
-  const patterns = /^(?:(\s+)|(-?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?)|("(?:[^"]|\\.|\n)*")|([[()]|]\.?)|(\w[-\w._:\/%]*))/;
+  const patterns = /^(?:(\s+)|(-?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?(?![-\w._:\/\)\s]))|("(?:[^"]|\\.|\n)*")|([[()]|]\.?)|(\w[-\w._:\/%]*))/;
   let n;
   while ((n = patterns.exec(rest))) {
     if (n[1] || n[0].length === 0) {
