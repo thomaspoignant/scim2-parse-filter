@@ -1,6 +1,7 @@
 import * as toknizer from "./parser";
 import * as tester from "./tester";
 import * as fl from "./flatten";
+export { expand } from './expand';
 export { stringify } from "./stringify";
 
 /** Filter is filter ast object. There is extends [Operation] */
@@ -32,10 +33,16 @@ export interface Suffix extends Operation {
   op: "pr";
   attrPath: AttrPath;
 }
-export interface LogExp extends Operation {
-  op: "and" | "or";
+export interface AndExp extends Operation {
+  op: "and";
   filters: Filter[];
 }
+export interface OrExp extends Operation {
+  op: "or";
+  filters: Filter[];
+}
+export type LogExp = AndExp | OrExp;
+
 export type AttrPath = string; // [URL ":"]?attrName("."subAttr)*
 
 export const Tester = tester.Tester;
