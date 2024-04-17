@@ -10,7 +10,7 @@ export type Token = {
 export function tokenizer(f: string): Token[] {
   const ret: Token[] = [];
   let rest = f;
-  const patterns = /^(?:(\s+)|(-?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?(?![-\w._:\/\)\s]))|("(?:[^"]|\\.|\n)*")|([[()]|]\.?)|(\w[-\w._:\/%]*))/;
+  const patterns = /^(?:(\s+)|(-?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?(?![-\w._:\/\)\s]))|("(?:[^"\\]|\\.|\n)*")|([[()]|]\.?)|(\w[-\w._:\/%]*))/;
   let n;
   while ((n = patterns.exec(rest))) {
     if (n[1] || n[0].length === 0) {
@@ -18,7 +18,7 @@ export function tokenizer(f: string): Token[] {
     } else if (n[2]) {
       ret.push({ literal: n[2], type: "Number" });
     } else if (n[3]) {
-      const literal = n[3].replace(/\\/g, '\\\\');
+      const literal = n[3].replace(/\\(?!")/g, '\\\\');
       ret.push({ literal, type: "Quoted" });
     } else if (n[4]) {
       ret.push({ literal: n[4], type: "Bracket" });
