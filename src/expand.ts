@@ -33,7 +33,7 @@ export const expand = (f: Filter): Filter => {
       return valfilter(f.valFilter, f.attrPath);
     case "or":
       return { ...f, filters: f.filters.map(expand) };
-    case "and":
+    case "and": {
       const expandedChildren = f.filters.map(expand);
       const hasOr = expandedChildren.some(isOr);
 
@@ -46,6 +46,7 @@ export const expand = (f: Filter): Filter => {
       ).map((filters) => expand({ op: "and", filters }));
 
       return { op: "or", filters: distributedAnds };
+    }
   }
   return f;
 };
