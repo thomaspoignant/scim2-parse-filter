@@ -31,6 +31,8 @@ export const expand = (f: Filter): Filter => {
   switch (f.op) {
     case "[]":
       return valfilter(f.valFilter, f.attrPath);
+    case "or":
+      return { ...f, filters: f.filters.map(expand) };
     case "and":
       const expandedChildren = f.filters.map(expand);
       const hasOr = expandedChildren.some(isOr);

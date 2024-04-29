@@ -76,5 +76,9 @@ describe("expand", () => {
       `${e1} and (${e2} or (${e3} and (${e4} or ${e5})))`,
       or(and(a1, a2), or(and(a1, and(a3, a4)), and(a1, and(a3, a5))))
     );
+    test(
+      `${e1} or (${e2} and (${e3} or ${e4}))`,
+      or(a1, or(and(a2, a3), and(a2, a4)))
+    );
   });
 });
