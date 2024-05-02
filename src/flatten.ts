@@ -9,7 +9,7 @@ export const valfilter = (f: Filter, path?: string): Filter => {
     case "or":
       return { ...f, filters: f.filters.map(c => valfilter(c, path)) };
     case "not":
-      return { ...f, filter: valfilter(f, path) };
+      return { ...f, filter: valfilter(f.filter, path) };
     case "[]":
       return valfilter(f.valFilter, f.attrPath);
   }
