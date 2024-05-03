@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import { Filter, filter, parse, stringify } from "../src";
+import { Filter, filter, parse, stringify, expand, flatten } from "../src";
 
 describe("readme", () => {
   it("filter", () => {
@@ -75,5 +75,72 @@ describe("readme", () => {
     };
 
     assert.deepEqual(stringify(ast), 'userType eq "Employee" and emails[type eq "work" and value co "@example.com"]');
+  });
+  it("expand", () => {
+    const f = parse(
+      `userType eq "Employee" and emails[type eq "work" or value co "@example.com"]`
+    );
+
+    assert.deepEqual(expand(f), {
+      op: "or",
+      filters: [
+        {
+          op: "and",
+          filters: [
+            {
+              op: "eq",
+              attrPath: "userType",
+              compValue: "Employee",
+            },
+            {
+              op: "eq",
+              attrPath: "emails.type",
+              compValue: "work",
+            },
+          ],
+        },
+        {
+          op: "and",
+          filters: [
+            {
+              op: "eq",
+              attrPath: "userType",
+              compValue: "Employee",
+            },
+            {
+              op: "co",
+              attrPath: "emails.value",
+              compValue: "@example.com",
+            },
+          ],
+        },
+      ],
+    });
+  });
+  it("flatten", () => {
+    const f = parse(
+      `userType eq "Employee" and (userName eq "bob" and email ew "@example.com")`
+    );
+
+    assert.deepEqual(flatten(f), {
+      op: "and",
+      filters: [
+        {
+          op: "eq",
+          attrPath: "userType",
+          compValue: "Employee",
+        },
+        {
+          op: "eq",
+          attrPath: "userName",
+          compValue: "bob",
+        },
+        {
+          op: "ew",
+          attrPath: "email",
+          compValue: "@example.com",
+        },
+      ],
+    });
   });
 });
