@@ -103,3 +103,76 @@ const ast: Filter = {
 
 assert.deepEqual(stringify(ast), 'userType eq "Employee" and emails[type eq "work" and value co "@example.com"]');
 ```
+
+### expand
+and you can expand an AST's `and` and `[]` nodes.
+
+```typescript
+const f = parse(`userType eq "Employee" and emails[type eq "work" or value co "@example.com"]`);
+
+assert.deepEqual(expand(f), {
+  op:"or",
+  filters:[
+    {
+      op: "and",
+      filters: [
+        {
+          op:"eq",
+          attrPath:"userType",
+          compValue:"Employee"
+        },
+        {
+          op:"eq",
+          attrPath:"emails.type",
+          compValue:"work"
+        },
+      ]
+    },
+    {
+      op: "and",
+      filters: [
+        {
+          op:"eq",
+          attrPath:"userType",
+          compValue:"Employee"
+        },
+        {
+          op:"co",
+          attrPath:"emails.value",
+          compValue:"@example.com"
+        }
+    ]
+    }
+  ]
+});
+```
+
+### flatten
+and you can flatten an AST's nodes.
+
+```typescript
+const f = parse(
+  `userType eq "Employee" and (userName eq "bob" and email ew "@example.com")`
+);
+
+assert.deepEqual(flatten(f), {
+  op: "and",
+  filters: [
+    {
+      op: "eq",
+      attrPath: "userType",
+      compValue: "Employee",
+    },
+    {
+      op: "eq",
+      attrPath: "userName",
+      compValue: "bob",
+    },
+    {
+      op: "ew",
+      attrPath: "email",
+      compValue: "@example.com",
+    },
+  ],
+});
+```
