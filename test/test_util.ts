@@ -1,4 +1,4 @@
-import { Compare, Filter, ValuePath, Suffix } from "../src";
+import { Compare, Filter, ValuePath, NotFilter, Suffix } from "../src";
 
 export const EOT = { literal: "", type: "EOT" };
 export function eq(attrPath: string, compValue: any): Compare {
@@ -18,4 +18,7 @@ export function v(attrPath: string, valFilter: Filter): ValuePath {
 }
 export function pr(attrPath: string): Suffix {
   return { op: "pr", attrPath };
+}
+export function not(filter: Filter): NotFilter {
+  return { op: "not", filter };
 }
