@@ -1,4 +1,4 @@
-import { eq, and, or } from "./test_util";
+import { eq, and, or, not, pr  } from "./test_util";
 import { Filter, parse, flatten } from "../src";
 import { assert } from "chai";
 
@@ -35,6 +35,9 @@ describe("flatten", () => {
       `xx[${e1} and ((${e2} and ${e4}))]`,
       and(eq("xx.n1", 1), eq("xx.n2", 2), eq("xx.n4", 4))
     );
+    test('not a pr', not(pr('a')));
+    test('not a[b pr]', not(pr('a.b')));
+    test('a[not b pr]', not(pr('a.b')));
   });
   describe("andor", () => {
     test(`(${e1} or ${e2}) and ${e3}`, and(or(a1, a2), a3));
