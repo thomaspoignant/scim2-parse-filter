@@ -128,11 +128,11 @@ export class Tester {
       return r == v;
     }
     if (typeof r === "string" && typeof v === "string" && !this.isCaseExact(attrPath ?? "")) {
-      return r.toLowerCase().indexOf(v.toLowerCase()) !== -1;
+      return r.toLowerCase().includes(v.toLowerCase());
     }
     if (typeof r !== "string") {
       r = r.toString();
     }
-    return r.indexOf(v.toString()) !== -1;
+    return r.includes(v.toString());
   }
 }
