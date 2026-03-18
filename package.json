@@ -21,12 +21,17 @@
   },
   "author": "thomas.poignant@gmail.com",
   "license": "Unlicense",
+  "overrides": {
+    "diff": "8.0.3",
+    "serialize-javascript": "7.0.4"
+  },
   "devDependencies": {
-    "@types/chai": "^5.2.2",
-    "@types/mocha": "^10.0.0",
-    "chai": "^6.0.1",
-    "mocha": "^11.0.1",
-    "ts-node": "^10.1.0",
-    "typescript": "^5.4.3"
+    "@types/node": "^25.5.0",
+    "@types/chai": "^5.2.3",
+    "@types/mocha": "^10.0.10",
+    "chai": "^6.2.2",
+    "mocha": "^11.7.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }
