@@ -47,10 +47,11 @@ export type AttrPath = string; // [URL ":"]?attrName("."subAttr)*
 
 export const Tester = tester.Tester;
 export type Tester = tester.Tester;
+export type { FilterOptions, CaseExactResolver } from "./tester";
 
-export function filter(filter: Filter): (r: any) => boolean {
-  const tester = new Tester();
-  return (r: any) => tester.test(r, filter);
+export function filter(filter: Filter, options?: tester.FilterOptions): (r: any) => boolean {
+  const t = new Tester(options);
+  return (r: any) => t.test(r, filter);
 }
 export function parse(query: string): Filter {
   const l = new toknizer.Tokens(toknizer.tokenizer(query));
