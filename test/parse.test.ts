@@ -121,6 +121,9 @@ describe('parse', () => {
       `title pr or userType eq "Intern"`,
       or(pr("title"), eq("userType", "Intern"))
     );
+    test('balance lt 10 and title pr', and(op("lt", "balance", 10), pr("title")));
+    test('balance lt -10 and title pr', and(op("lt", "balance", -10), pr("title")));
+    test('balance lt -10 and balance gt -100', and(op("lt", "balance", -10), op("gt", "balance", -100)));
     test(
       `schemas eq "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User"`,
       eq(
