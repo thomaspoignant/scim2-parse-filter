@@ -254,6 +254,12 @@ describe('stringify', () => {
     );
   });
 
+  it('consistent stringify and parse of backslashes', () => {
+    for (const text of ['a eq "domain\\\\user"', 'a eq "C:\\\\"', 'a eq "\\\\\\""']) {
+      assert.deepEqual(stringify(parse(text)), text)
+    }
+  })
+
   it('consistent stringify and parse', () => {
     const text = '064869bf-be25-466f-803d-004a0540574b eq "bjensen"'
     const f = parse(text)
