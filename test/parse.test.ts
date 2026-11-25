@@ -268,6 +268,21 @@ describe('parse', () => {
     );
   });
 
+  describe('backslash in value', () => {
+    test('userName eq "domain\\\\user"', eq("userName", "domain\\user"));
+    test('path eq "C:\\\\"', eq("path", "C:\\"));
+    test('path eq "a\\\\\\"b"', eq("path", 'a\\"b'));
+    test('path eq "\\\\" and x pr', and(eq("path", "\\"), pr("x")));
+
+    it('consistent parse and stringify of backslashes', () => {
+      for (const value of ['domain\\user', 'C:\\', '\\\\server\\share', '\\"', '"\\', '\\\\']) {
+        const f : Filter = { op: 'eq', attrPath: 'a', compValue: value }
+
+        assert.deepEqual(parse(stringify(f)), f)
+      }
+    })
+  })
+
   describe('attrPath start with number', () => {
     test('064869bf-be25-466f-803d-004a0540574b eq "bjensen"', eq("064869bf-be25-466f-803d-004a0540574b", "bjensen"));
 

@@ -18,7 +18,8 @@ export function tokenizer(f: string): Token[] {
     } else if (n[2]) {
       ret.push({ literal: n[2], type: "Number" });
     } else if (n[3]) {
-      const literal = n[3].replace(/\\(?!")/g, '\\\\');
+      // Keep the escapes \\ and \", any other backslash stands for itself.
+      const literal = n[3].replace(/\\["\\]|\\/g, m => m.length === 2 ? m : "\\\\");
       ret.push({ literal, type: "Quoted" });
     } else if (n[4]) {
       ret.push({ literal: n[4], type: "Bracket" });
